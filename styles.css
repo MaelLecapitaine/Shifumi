@@ -1,0 +1,164 @@
+/* styles.css - Thème moderne pour le jeu Shifumi
+   Placez ce fichier à la racine (même dossier que index.html) et ajoutez
+   <link rel="stylesheet" href="styles.css"> dans la balise <head> de index.html
+*/
+
+:root{
+  --bg-1: #0f172a; /* gris très foncé */
+  --bg-2: #0b1220; /* dégradé secondaire */
+  --card: #0b1228;
+  --accent: #7dd3fc; /* bleu clair */
+  --accent-2: #60a5fa; /* bleu un peu plus soutenu */
+  --success: #34d399; /* vert */
+  --danger: #fb7185; /* rouge */
+  --muted: #94a3b8; /* texte secondaire */
+  --glass: rgba(255,255,255,0.04);
+  --glass-2: rgba(255,255,255,0.02);
+  --radius: 14px;
+  --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  --glass-border: rgba(255,255,255,0.05);
+}
+
+*{box-sizing: border-box}
+
+html,body{
+  height:100%;
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  -webkit-font-smoothing:antialiased;
+  color: #e6eef8;
+}
+
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+}
+
+/* Card-like area around the whole content */
+body > :first-child{
+  width:100%;
+  max-width:720px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: calc(var(--radius) + 6px);
+  padding:28px 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+h1{
+  margin:0 0 18px 0;
+  font-size:28px;
+  letter-spacing:0.6px;
+  line-height:1;
+  color: white;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* Small subtitle under the title: we don't have it in markup but style p if present near top */
+body p:first-of-type{
+  margin-top:10px;
+  color:var(--muted);
+}
+
+/* Buttons row */
+#boutonKayou, #boutonFeuille, #boutonCiseau, #restart{
+  -webkit-appearance:none;
+  border: none;
+  padding:14px 22px;
+  margin-right:12px;
+  margin-top:8px;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  box-shadow: 0 6px 16px rgba(3,7,18,0.45);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  color: #eaf6ff;
+  min-width:110px;
+}
+
+#boutonKayou{
+  border-left: 4px solid rgba(255,255,255,0.03);
+}
+
+/* Give each button a little personality */
+#boutonKayou{ /* Pierre */
+  box-shadow: 0 8px 24px rgba(6,8,12,0.6), inset 0 -8px 20px rgba(0,0,0,0.25);
+}
+
+#boutonFeuille{ /* Feuille */
+}
+
+#boutonCiseau{ /* Ciseaux */
+}
+
+/* Hover and active */
+#boutonKayou:hover, #boutonFeuille:hover, #boutonCiseau:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(6,8,12,0.6);
+}
+#boutonKayou:active, #boutonFeuille:active, #boutonCiseau:active{
+  transform: translateY(-1px) scale(.995);
+}
+
+/* Focus visible for accessibility */
+#boutonKayou:focus-visible, #boutonFeuille:focus-visible, #boutonCiseau:focus-visible{
+  outline: 3px solid rgba(125,211,252,0.18);
+  outline-offset: 3px;
+}
+
+/* Labels and stats */
+p{ margin-top:18px; color:var(--muted); font-size:15px }
+label{ font-weight:700; color: #fff; }
+
+/* The "Le bot a joué" label gets a pill style */
+#labelBot{
+  display:inline-block;
+  min-width:120px;
+  padding:8px 12px;
+  margin:6px 0 6px 0;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(125,211,252,0.06), rgba(96,165,250,0.04));
+  color: var(--accent);
+  font-weight:700;
+  text-align:center;
+}
+
+/* Stat numbers colored depending on meaning (we target the IDs used in the markup) */
+#labelWins{ color: var(--success); margin-left:6px }
+#labelLosses{ color: var(--danger); margin-left:6px }
+#labelEqualities{ color: var(--muted); margin-left:6px }
+
+/* Responsive: wrap buttons on small screens */
+@media (max-width:480px){
+  #boutonKayou, #boutonFeuille, #boutonCiseau{
+    width:100%;
+    display:block;
+    margin-right:0;
+    margin-bottom:10px;
+  }
+}
+
+/* Small animated confetti-like pulse on win/lose/equality update
+   The JS doesn't add classes, but the user can later call e.g.
+   element.classList.add('pulse-win') then remove it after 600ms
+*/
+@keyframes pulseUp{
+  0%{ transform: translateY(0) scale(1); opacity:1 }
+  60%{ transform: translateY(-10px) scale(1.06); opacity:1 }
+  100%{ transform: translateY(0) scale(1); opacity:1 }
+}
+.pulse-win{ animation: pulseUp .58s ease; color: var(--success) !important; }
+.pulse-lose{ animation: pulseUp .58s ease; color: var(--danger) !important; }
+.pulse-draw{ animation: pulseUp .58s ease; color: var(--muted) !important; }
+
+/* Tiny credit / hint line at the bottom if you add one */
+small.hint{
+  display:block; margin-top:18px; color: #8fa6c1; font-size:12px;
+}
